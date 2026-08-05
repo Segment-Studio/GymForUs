@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b0d12" />
+    <meta name="description" content="GymForUs — plataforma inteligente para planejamento alimentar, treino e metas de performance." />
+    <meta property="og:title" content="GymForUs" />
+    <meta property="og:description" content="Plano inteligente para treino, alimentação e evolução real." />
+    <meta property="og:type" content="website" />
+    <meta name="robots" content="index, follow" />
+    <title>GymForUs | Planejamento inteligente</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%230d1117'/%3E%3Cpath d='M16 26h6v12h-6zm26 0h6v12h-6zM24 20h16v6H24zm0 18h16v6H24zM32 8v48' stroke='%23f5f7fb' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+    <div class="background-hero"></div>
+    <div class="noise"></div>
+
+    <header class="topbar">
+        <a class="brand" href="/">GymForUs</a>
+        <nav>
+            <a href="#form-section">Ficha</a>
+            <a href="#results">Resultados</a>
+            <a id="nav-auth-link" href="/dashboard">Entrar</a>
+        </nav>
+    </header>
+
+    <main class="page-shell">
+        <section class="hero section-shell">
+            <div class="hero-copy reveal">
+                <span class="eyebrow">Plano inteligente para treino e alimentação</span>
+                <h1>Transforme a rotina em um sistema claro, profissional e centrado em resultados.</h1>
+                <p>Uma plataforma premium para estimar calorias, macros, treino e hábitos com base em referências gerais. O resultado é simples, elegante e preparado para evoluir com você.</p>
+                <div class="hero-actions">
+                    <a class="cta-button" href="#form-section">Gerar plano inteligente</a>
+                    <a class="secondary-button" href="/dashboard">Ir para o dashboard</a>
+                </div>
+                <div class="hero-meta" aria-label="Benefícios da plataforma">
+                    <span>Perfil real</span>
+                    <span>Estimações seguras</span>
+                    <span>Histórico salvo</span>
+                </div>
+            </div>
+
+            <div class="hero-card reveal glass-card">
+                <div class="hero-card-inner">
+                    <span class="eyebrow">Acesso premium</span>
+                    <p class="hero-card-copy">Entre para salvar seus planos, acompanhar seu histórico e voltar ao seu próximo planejamento com mais clareza.</p>
+                    <div class="auth-panel">
+                        <div class="mode-switch" role="tablist">
+                            <button class="mode-button active" type="button" data-mode="login">Entrar</button>
+                            <button class="mode-button" type="button" data-mode="register">Criar conta</button>
+                        </div>
+                        <form id="auth-form" class="auth-form">
+                            <input id="auth-username" class="auth-input" type="text" name="username" placeholder="Nome de usuário" autocomplete="username" />
+                            <input id="auth-email" class="auth-input" type="email" name="email" placeholder="E-mail" autocomplete="email" required />
+                            <input id="auth-password" class="auth-input" type="password" name="password" placeholder="Senha" autocomplete="current-password" required />
+                            <button class="primary-button auth-submit" type="submit">Acessar conta</button>
+                        </form>
+                        <p id="auth-message" class="auth-message" aria-live="polite"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="form-section" class="form-section section-shell reveal">
+            <div class="section-heading">
+                <span class="eyebrow">Ficha técnica</span>
+                <h2>Crie sua base de planejamento</h2>
+                <p class="section-copy">Preencha os campos com sua realidade atual para receber uma estimativa segura, organizada e elegante.</p>
+            </div>
+
+            <form id="profile-form" class="form-grid glass-card" novalidate>
+                <div class="field-group">
+                    <label for="age_group">Idade</label>
+                    <select id="age_group" name="age_group" required>
+                        <option value="">Selecione</option>
+                        <option value="13-18">13–18 anos</option>
+                        <option value="20-30">20–30 anos</option>
+                        <option value="30+">30+</option>
+                    </select>
+                </div>
+
+                <div class="field-group">
+                    <label for="current_weight">Peso atual (kg)</label>
+                    <select id="current_weight" name="current_weight" required></select>
+                </div>
+
+                <div class="field-group">
+                    <label for="desired_weight">Peso desejado (kg)</label>
+                    <select id="desired_weight" name="desired_weight" required></select>
+                </div>
+
+                <div class="field-group">
+                    <label for="objective">Objetivo</label>
+                    <select id="objective" name="objective" required>
+                        <option value="">Selecione</option>
+                        <option value="weight_loss">Perda de peso</option>
+                        <option value="muscle_gain">Ganho de massa muscular</option>
+                        <option value="strength_gain">Aumento de força</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="primary-button">Gerar plano inteligente</button>
+            </form>
+
+            <div id="form-message" class="form-message" aria-live="polite"></div>
+        </section>
+
+        <section id="loading" class="loading-section section-shell hidden">
+            <div class="loading-card glass-card">
+                <div class="spinner"></div>
+                <p id="loading-message">Montando sua análise...</p>
+                <div class="progress-track"><div id="progress-bar" class="progress-bar"></div></div>
+            </div>
+        </section>
+
+        <section id="results" class="results section-shell hidden">
+            <div class="section-heading">
+                <span class="eyebrow">Estimativas e orientação</span>
+                <h2>Resultado inteligente</h2>
+            </div>
+
+            <div class="card-grid metrics-grid">
+                <article class="glass-card metric-card"><span>Calorias diárias</span><strong id="daily-calories"></strong></article>
+                <article class="glass-card metric-card"><span>Proteínas</span><strong id="protein"></strong></article>
+                <article class="glass-card metric-card"><span>Carboidratos</span><strong id="carbs"></strong></article>
+                <article class="glass-card metric-card"><span>Gorduras</span><strong id="fats"></strong></article>
+                <article class="glass-card metric-card"><span>Água</span><strong id="water"></strong></article>
+                <article class="glass-card metric-card"><span>Tempo estimado</span><strong id="time-estimated"></strong></article>
+            </div>
+
+            <div class="card-grid detail-grid">
+                <article class="glass-card info-card">
+                    <h3>Plano alimentar</h3>
+                    <ul id="meal-plan"></ul>
+                </article>
+                <article class="glass-card info-card">
+                    <h3>Plano de treino</h3>
+                    <div id="training-plan"></div>
+                </article>
+                <article class="glass-card info-card">
+                    <h3>Recomendações</h3>
+                    <ul id="recommendations"></ul>
+                </article>
+                <article class="glass-card info-card">
+                    <h3>Dicas e hábitos</h3>
+                    <ul id="tips"></ul>
+                </article>
+                <article class="glass-card info-card">
+                    <h3>Observações</h3>
+                    <ul id="observations"></ul>
+                </article>
+                <article class="glass-card info-card responsibility">
+                    <h3>Aviso de responsabilidade</h3>
+                    <p id="responsibility-note"></p>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

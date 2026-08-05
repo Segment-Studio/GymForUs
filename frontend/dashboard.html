@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GymForUs · Dashboard</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body class="dashboard-page">
+    <div class="dashboard-shell">
+        <header class="dashboard-header glass-card">
+            <div>
+                <p class="eyebrow">Área privada</p>
+                <h1>Dashboard premium</h1>
+                <p class="section-copy">Bem-vindo(a), {{ user.username }}. Aqui ficam seus planos salvos, seu perfil e sua evolução recente.</p>
+            </div>
+            <div class="dashboard-actions">
+                <a class="secondary-button" href="/">Voltar para o site</a>
+                <button id="logout-button" class="primary-button ghost-button" type="button">Sair</button>
+            </div>
+        </header>
+
+        <section class="dashboard-grid">
+            <article class="glass-card dashboard-card">
+                <span class="eyebrow">Perfil</span>
+                <p><strong>Usuário:</strong> {{ user.username }}</p>
+                <p><strong>E-mail:</strong> {{ user.email }}</p>
+                {% if profile %}
+                    <p><strong>Nome:</strong> {{ profile.full_name or 'Não informado' }}</p>
+                    <p><strong>Idade:</strong> {{ profile.age or '—' }} anos</p>
+                    <p><strong>Altura:</strong> {{ profile.height_cm or '—' }} cm</p>
+                    <p><strong>Nível:</strong> {{ profile.experience_level or '—' }}</p>
+                {% else %}
+                    <p class="muted-text">Complete seu perfil para personalizar melhor os treinos e o plano.</p>
+                {% endif %}
+            </article>
+
+            <article class="glass-card dashboard-card">
+                <span class="eyebrow">Histórico</span>
+                <p>{{ history|length }} plano(s) salvo(s) no seu histórico.</p>
+                <p class="muted-text">Os próximos planos passam a refletir seu perfil, nível e objetivos.</p>
+            </article>
+        </section>
+
+        <section class="glass-card dashboard-card">
+            <div class="section-heading inline-heading">
+                <span class="eyebrow">Perfil detalhado</span>
+                <h2>Personalize seu plano</h2>
+            </div>
+            <form id="dashboard-profile-form" class="dashboard-profile-form">
+                <div class="field-group">
+                    <label for="full_name">Nome completo</label>
+                    <input id="full_name" name="full_name" type="text" value="{{ profile.full_name if profile else '' }}" placeholder="Seu nome" />
+                </div>
+                <div class="field-group">
+                    <label for="sex">Sexo</label>
+                    <select id="sex" name="sex">
+                        <option value="">Selecione</option>
+                        <option value="female" {% if profile and profile.sex == 'female' %}selected{% endif %}>Feminino</option>
+                        <option value="male" {% if profile and profile.sex == 'male' %}selected{% endif %}>Masculino</option>
+                        <option value="other" {% if profile and profile.sex == 'other' %}selected{% endif %}>Outro</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label for="age">Idade</label>
+                    <input id="age" name="age" type="number" min="13" max="100" value="{{ profile.age if profile and profile.age is not none else '' }}" />
+                </div>
+                <div class="field-group">
+                    <label for="height_cm">Altura (cm)</label>
+                    <input id="height_cm" name="height_cm" type="number" min="120" max="240" value="{{ profile.height_cm if profile and profile.height_cm is not none else '' }}" />
+                </div>
+                <div class="field-group">
+                    <label for="experience_level">Nível de experiência</label>
+                    <select id="experience_level" name="experience_level">
+                        <option value="">Selecione</option>
+                        <option value="beginner" {% if profile and profile.experience_level == 'beginner' %}selected{% endif %}>Iniciante</option>
+                        <option value="intermediate" {% if profile and profile.experience_level == 'intermediate' %}selected{% endif %}>Intermediário</option>
+                        <option value="advanced" {% if profile and profile.experience_level == 'advanced' %}selected{% endif %}>Avançado</option>
+                    </select>
+                </div>
+                <button class="primary-button" type="submit">Salvar perfil</button>
+            </form>
+            <p id="dashboard-profile-message" class="auth-message" aria-live="polite"></p>
+        </section>
+
+        <section class="glass-card history-card">
+            <div class="section-heading inline-heading">
+                <span class="eyebrow">Histórico de planos</span>
+                <h2>Seu progresso recente</h2>
+            </div>
+            {% if history %}
+                <div class="history-list">
+                    {% for item in history %}
+                        <article class="history-item">
+                            <div class="history-top">
+                                <strong>{{ item.objective_label }}</strong>
+                                <span>{{ item.created_at }}</span>
+                            </div>
+                            <p>{{ item.metrics.daily_calories }} kcal · {{ item.metrics.protein }}g proteína · {{ item.metrics.water_liters }}L água</p>
+                            <ul>
+                                {% for key, value in item.plan.plan_alimentar.items() %}
+                                    <li>{{ key.replace('_', ' ') }}: {{ value }}</li>
+                                {% endfor %}
+                            </ul>
+                        </article>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="muted-text">Você ainda não gerou nenhum plano. Volte à página inicial e crie seu primeiro planejamento.</p>
+            {% endif %}
+        </section>
+    </div>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
