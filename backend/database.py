@@ -1,14 +1,39 @@
 from __future__ import annotations
 
 import json
+import os
 import sqlite3
+import tempfile
 from pathlib import Path
 
 from werkzeug.security import check_password_hash, generate_password_hash
 
 BASE_DIR = Path(__file__).resolve().parents[1]
-DB_PATH = BASE_DIR / "data" / "gymforus.db"
-DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+
+
+def resolve_db_path(base_dir: Path | None = None) -> Path:
+    env_path = os.getenv("DB_PATH")
+    if env_path:
+        return Path(env_path)
+
+    if os.getenv("VERCEL") or os.getenv("NOW_REGION"):
+        return Path(tempfile.gettempdir()) / "gymforus.db"
+
+    resolved_base = base_dir or BASE_DIR
+    return resolved_base / "data" / "gymforus.db"
+
+
+DB_PATH = resolve_db_path()
+
+
+def ensure_db_dir(path: Path) -> None:
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+    except OSError:
+        pass
+
+
+ensure_db_dir(DB_PATH)
 
 
 def get_connection() -> sqlite3.Connection:
