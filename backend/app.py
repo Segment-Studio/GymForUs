@@ -4,8 +4,7 @@ import logging
 from collections import defaultdict
 from pathlib import Path
 from time import monotonic
-from urllib.parse import urlsplit
-
+from urllib.parse import urlparse
 from flask import Flask, jsonify, redirect, render_template, request, session, url_for
 from flask_cors import CORS
 
@@ -90,6 +89,7 @@ def is_rate_limited(endpoint: str) -> bool:
 def normalize_origin(origin: str | None) -> str:
     if not origin:
         return ""
+    from urllib.parse import urlsplit
     parsed = urlsplit(origin.strip())
     if not parsed.scheme or not parsed.hostname:
         return origin.strip().rstrip("/").lower()
