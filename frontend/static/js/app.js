@@ -40,9 +40,6 @@ function initializeApp() {
       button.addEventListener('click', () => setAuthMode(button.dataset.mode));
     });
   }
-  if (authForm) {
-    authForm.addEventListener('submit', handleAuthSubmit);
-  }
   if (logoutButton) {
     logoutButton.addEventListener('click', logout);
   }
@@ -235,50 +232,7 @@ function showDashboardProfileMessage(text, isError = false) {
 
 async function handleAuthSubmit(event) {
   event.preventDefault();
-  const endpoint = authMode === 'register' ? '/api/auth/register' : '/api/auth/login';
-  const payload = {
-    username: authUsernameInput ? authUsernameInput.value.trim() : '',
-    email: authEmailInput.value.trim(),
-    password: authPasswordInput.value,
-  };
-
-  if (!payload.email || !payload.password || (authMode === 'register' && !payload.username)) {
-    showAuthMessage('Preencha todos os campos da conta.', true);
-    return;
-  }
-
-  try {
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-
-    let data = {};
-    try {
-      data = await response.json();
-    } catch (_error) {
-      data = {};
-    }
-
-    if (!response.ok) {
-      if (response.status === 429) {
-        const rateLimitMessage = data.error || 'O site está recebendo muitas tentativas. Aguarde alguns instantes e tente novamente.';
-        showRateLimitMessage(rateLimitMessage);
-        return;
-      }
-      throw new Error(data.error || 'Falha ao autenticar.');
-    }
-
-    showAuthMessage(data.message || 'Conta conectada.');
-    if (navAuthLink) {
-      navAuthLink.textContent = 'Dashboard';
-      navAuthLink.href = '/dashboard';
-    }
-    window.location.href = '/dashboard';
-  } catch (error) {
-    showAuthMessage(error.message, true);
-  }
+  showAuthMessage('O acesso por login foi desativado nesta versão. Use a ficha técnica para gerar o plano.', true);
 }
 
 async function logout() {

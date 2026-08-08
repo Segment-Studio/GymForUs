@@ -43,6 +43,12 @@ for host in ("127.0.0.1", "localhost", "0.0.0.0"):
         allowed_origins.append(f"https://{host}:{port}")
 if settings.HOST not in {"0.0.0.0", "127.0.0.1", "localhost"}:
     allowed_origins.append(f"https://{settings.HOST}")
+allowed_origins.extend([
+    "https://*.vercel.app",
+    "https://*.vercel.app/*",
+    "https://gym-for-us.vercel.app",
+    "https://gym-for-us-git-main-segmentzx.vercel.app",
+])
 allowed_origins = [origin for origin in dict.fromkeys(allowed_origins)]
 CORS(
     app,
@@ -97,13 +103,21 @@ def normalize_origin(origin: str | None) -> str:
     return f"{parsed.scheme.lower()}://{parsed.hostname.lower()}{port}".rstrip("/")
 
 
-def is_origin_allowed() -> bool:
-    origin = request.headers.get("Origin")
-    if not origin:
+def is_origin_allowed(origin: str | None = None) -> bool:
+    origin_value = origin or request.headers.get("Origin")
+    if not origin_value:
         return True
-    normalized_origin = normalize_origin(origin)
+
+    normalized_origin = normalize_origin(origin_value)
     normalized_allowed = {normalize_origin(candidate) for candidate in allowed_origins}
-    return normalized_origin in normalized_allowed
+
+    if normalized_origin in normalized_allowed:
+        return True
+
+    if normalized_origin.endswith(".vercel.app") or normalized_origin.endswith(".vercel.app/"):
+        return True
+
+    return False
 
 
 @app.after_request
