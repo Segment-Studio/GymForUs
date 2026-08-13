@@ -139,3 +139,4 @@ Contribuições são bem-vindas! Para contribuir:
 ## 📄 Licença
 
 Este projeto é desenvolvido e mantido pela **Segment Studio**. Verifique o arquivo `LICENSE` no repositório para mais detalhes sobre os termos de uso.
+Distribuído sob a licença MIT
